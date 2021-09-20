@@ -1,0 +1,16 @@
+doctype html 
+html 
+	head 
+		meta(charset='utf-8')
+		title= title 
+	
+	body 
+		h1= message
+		form(action=actionURL, method="POST")
+			input(type="text" name="message")
+			button send
+
+		div 
+			a(href="/birds") birds
+		div
+			a(href="/cars") cars
