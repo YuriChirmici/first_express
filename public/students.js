@@ -10,10 +10,10 @@ const viewModel = kendo.observable({
 		return this.get('schools').map( el => {
 			const school = {
 				name: el.name,
-				value: `${el.name}`
+				value: el.name
 			}
 			if (el.address) {
-				school.value += ` (${el.address})`;
+				school.name += ` (${el.address})`;
 			}
 			return school;
 		});
