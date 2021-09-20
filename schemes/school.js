@@ -6,6 +6,7 @@ const schoolSchema = mongoose.Schema({
 		type: String,
 		required: true
 	},
+	address: String,
 	created: {
 		type: Date,
 		default: Date.now

@@ -21,7 +21,10 @@ mongoose.connect('mongodb://localhost/test3', (err) => {
 				firstName: 'Yuri',
 				lastName: 'Kirmichi'
 			},
-			school: vazovSchool._id
+			school: { 
+				_id: vazovSchool._id,
+				name: vazovSchool.name
+			}
 		});
 	
 		yuriStudent.save((err) => {
@@ -34,7 +37,10 @@ mongoose.connect('mongodb://localhost/test3', (err) => {
 			studentName: {
 				firstName: 'Boris'
 			},
-			school: vazovSchool._id
+			school: { 
+				_id: vazovSchool._id,
+				name: vazovSchool.name
+			}
 		})
 	
 		borisStudent.save((err) => {

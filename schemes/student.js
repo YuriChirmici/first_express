@@ -9,7 +9,10 @@ const studentSchema = mongoose.Schema({
 		},
 		lastName: String
 	},
-	school: mongoose.Schema.Types.ObjectId,
+	school: { 
+		_id: mongoose.Schema.Types.ObjectId,
+		name: String
+	},
 	biography: String,
 	created: {
 		type: Date,
