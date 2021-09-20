@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const Student = require('./schemas/student');
-const School = require('./schemas/school');
+const Student = require('./schemes/student');
+const School = require('./schemes/school');
 
 mongoose.connect('mongodb://localhost/test3', (err) => {
 	if (err) throw err;
