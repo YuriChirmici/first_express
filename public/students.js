@@ -30,7 +30,8 @@ const viewModel = kendo.observable({
 	sendStudent(e) {
 		e.preventDefault();
 		const isNewSchool = this.get('isNewSchool');
-		const schoolsValue = this.get('schoolsValue');
+		const schoolsValue = this.get('schoolsValue').value;
+		console.log(schoolsValue);
 		this.set('isError', false);
 		this.set('isDataSent', false);
 
@@ -55,10 +56,9 @@ const viewModel = kendo.observable({
 				address: $('input[name=schoolAddress]').val().trim(),
 			}
 		} else {
-			if (!schoolsValue.name ||
-				schoolsValue.name.trim().length === 0) {
-					this.set('isError', true);
-					return;
+			if (!schoolsValue || schoolsValue.trim().length === 0) {
+				this.set('isError', true);
+				return;
 			}
 
 			data.school = {
