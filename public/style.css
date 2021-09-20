@@ -1,0 +1,55 @@
+body {
+    margin: 0;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+.container {
+    width: 100%;
+    max-width: 1170px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.form {
+    width: 100%;
+    max-width: 500px;
+    margin: 50px auto 0;
+}
+
+.form input {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.students__loading {
+    text-align: center;
+}
+
+.school__list {
+    margin-bottom: 15px;
+}
+
+.addNewSchool {
+    margin-top: 15px;
+}
+
+.newSchool {
+    padding-left: 20px;
+    padding-top: 10px;
+    margin-bottom: 15px;
+}
+
+.dataSent {
+    text-align: center;
+    color: #008800;
+}
+
+.validErr {
+    text-align: center;
+    color: #880000;
+}

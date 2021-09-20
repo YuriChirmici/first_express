@@ -2,17 +2,16 @@ const mongoose = require('mongoose');
 
 const studentSchema = mongoose.Schema({
 	_id: mongoose.Schema.Types.ObjectId,
-	studentName: {
-		firstName: {
-			type: String,
-			required: true
-		},
-		lastName: String
+	firstName: {
+		type: String,
+		required: true
 	},
+	lastName: String,
 	school: { 
 		_id: mongoose.Schema.Types.ObjectId,
 		name: String
 	},
+	address: String,
 	biography: String,
 	created: {
 		type: Date,

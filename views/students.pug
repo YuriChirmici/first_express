@@ -1,0 +1,72 @@
+doctype html
+html(lang="en")
+	head
+		meta(charset="UTF-8")
+		meta(http-equiv="X-UA-Compatible", content="IE=edge")
+		meta(name="viewport", content="width=device-width, initial-scale=1.0")
+		link(rel="stylesheet", href="style.css")
+		title Students
+
+		link(href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.common.min.css", rel="stylesheet")
+		link(href="https://kendo.cdn.telerik.com/2021.3.914/styles/kendo.default.min.css", rel="stylesheet")
+		script(src="https://kendo.cdn.telerik.com/2021.3.914/js/jquery.min.js")
+		script(src="https://kendo.cdn.telerik.com/2021.3.914/js/kendo.all.min.js")
+		
+	body 
+		div.container
+			div.students__inner
+				div.students__form(data-bind="invisible: isLoading")
+					form.form(method="POST", action="action")
+						label(for="firstName") First name:
+						input(name="firstName" id="firstName" required)
+
+						label(for="lastName") Last name:
+						input(name="lastName" id="lastName")
+
+						label School:
+						div.school__list(data-bind="invisible: isNewSchool")
+							input( id="school", style="width: 100%;", required,
+								data-role="dropdownlist"
+								data-option-label="Select school:"
+								data-text-field="name"
+								data-value-field="value"
+								data-height="300"
+								data-template="select-template"
+								data-value-template="select-value-template"
+								data-bind="source: schoolsOptions, value: schoolsValue"
+							)
+							div.addNewSchool 
+								span Is your school missing? 
+								button(type="button" data-bind="click: changeIsNewSchool(true)") Add new school 
+								
+						div.newSchool(data-bind="visible: isNewSchool")
+							label(for="schoolName") School name:
+							input(name="schoolName" id="schoolName" required)
+
+							label(for="schoolAddress") School address:
+							input(name="schoolAddress" id="schoolAddress")
+
+							button(type="button" data-bind="click: changeIsNewSchool(false)") Back to the list of schools
+
+						label(for="address") Address:
+						input(name="address" id="address")
+
+						label(for="biography") Biography:
+						input(name="biography" id="biography")
+
+						button(data-bind="click: sendStudent") Send
+
+				div.students__loading(data-bind="visible: isLoading")
+					span loading...
+				div.dataSent(data-bind="visible: isDataSent")
+					span Data sent successfully
+				div.validErr(data-bind="visible: isError")
+					span Validation error
+		
+		script(id="select-template" type="text/x-kendo-template")
+			span #: data.name #
+
+		script(id="select-value-template" type="text/x-kendo-template")
+			span #: data.value #
+
+		script(src="students.js")
