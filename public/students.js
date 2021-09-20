@@ -31,7 +31,7 @@ const viewModel = kendo.observable({
 		e.preventDefault();
 		const isNewSchool = this.get('isNewSchool');
 		const schoolsValue = this.get('schoolsValue').value;
-		console.log(schoolsValue);
+
 		this.set('isError', false);
 		this.set('isDataSent', false);
 
