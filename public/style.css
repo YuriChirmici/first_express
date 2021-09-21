@@ -53,3 +53,18 @@ body {
     text-align: center;
     color: #880000;
 }
+
+.students {
+    width: 100%;
+    max-width: 350px;
+    margin: 30px auto 0;
+}
+
+.form__footer {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button__send {
+    display: block;
+}

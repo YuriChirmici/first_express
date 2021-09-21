@@ -5,16 +5,29 @@ const School = require('../schemes/school');
 
 const router = express.Router();
 
-router.get('/getSchools', (req, res) => {
-    mongoose.connect('mongodb://localhost/test4', (err) => {
-        if (err) throw err; 
+router.get('/getSchools', async (req, res) => {
+	try {
+		await mongoose.connect('mongodb://localhost/test4');
+		const schools = await School.find().exec();
 
-        School.find().exec((err, schools) => {
-            if (err) throw err;
+		res.send(schools);
+	} catch (err) {
+		console.log(err);
+		res.sendStatus(500);
+	}
+})
 
-            res.send(schools);
-        })
-    })
+router.get('/getStudents', async (req, res) => {
+	try {
+		await mongoose.connect('mongodb://localhost/test4');
+
+		const students = await Student.find().exec();
+		console.log(students);
+		res.send(students);
+	} catch (err) {
+		console.log(err);
+		res.sendStatus(500);
+	}
 })
 
 module.exports = router;

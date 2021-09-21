@@ -53,20 +53,30 @@ html(lang="en")
 
 						label(for="biography") Biography:
 						input(name="biography" id="biography")
-
-						button(data-bind="click: sendStudent") Send
+						
+						div.form__footer
+							button.button__send(data-bind="click: sendStudent") Send
+							div.dataSent(data-bind="visible: isDataSent")
+								span Data sent successfully
+							div.validErr(data-bind="visible: isError")
+								span Validation error
+					div.students
+						h4 All students:
+						ul.students__list(
+							data-bind="source: students"
+							data-template="student__list-template"
+						) 
 
 				div.students__loading(data-bind="visible: isLoading")
 					span loading...
-				div.dataSent(data-bind="visible: isDataSent")
-					span Data sent successfully
-				div.validErr(data-bind="visible: isError")
-					span Validation error
-		
+						
 		script(id="select-template" type="text/x-kendo-template")
 			span #: data.name #
 
 		script(id="select-value-template" type="text/x-kendo-template")
 			span #: data.name #
+
+		script(id="student__list-template" type="text/x-kendo-template")
+			li #: firstName # #: lastName # (School: #: school.name #)
 
 		script(src="students.js")

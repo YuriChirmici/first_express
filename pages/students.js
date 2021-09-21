@@ -14,11 +14,10 @@ router.get('/', (req, res) => {
 
 router.post(actionURL, async (req, res) => {
 	try {
-		const body = JSON.parse(Object.keys(req.body)[0]);
 		await mongoose.connect('mongodb://localhost/test4');
 
-		let school = await setSchool(body.school);
-		const student = await setStudent(school.data._id, body);
+		let school = await setSchool(req.body.school);
+		const student = await setStudent(school.data._id, req.body);
 
 		//showData();
 
@@ -61,7 +60,9 @@ async function setStudent(school_id, data)  {
 	};
 
 	let student = await Student.findOne(findObj).exec();
+	let isNew = false;
 	if (!student) {
+		isNew = true;
 		const newStudent = new Student({
 			...findObj,
 			address: data.address, 
@@ -76,8 +77,7 @@ async function setStudent(school_id, data)  {
 		console.log('Student successfully saved.');
 		student = newStudent;
 	}
-
-	return student;
+	return (isNew) ? student : null;
 }
 
 async function showData() {

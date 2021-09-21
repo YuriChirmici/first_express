@@ -23,6 +23,7 @@ const viewModel = kendo.observable({
 	},
 
 	schoolsValue: {},
+	students: [],
 
 	changeIsNewSchool(isNewSchool) {
 		return () => {
@@ -82,12 +83,18 @@ const viewModel = kendo.observable({
 			method: 'POST',
 			url: 'http://localhost:3000/students/saveStudent',
 			data: JSON.stringify(data),
+			dataType: 'json',
+			contentType: 'application/json'
 		})
 			.done(({student, school}) => {
 				this.set('isDataSent', true);
 				if(school) {
 					const schools = this.get('schools');
 					this.set('schools', [...schools, school]);
+				}
+				if(student) {
+					const students = this.get('students');
+					this.set('students', [...students, student]);
 				}
 			})		
 	}
@@ -96,12 +103,17 @@ const viewModel = kendo.observable({
 kendo.bind($('.students__inner'), viewModel);
 
 $(function() {  
-	fetchSchools();
+	fetchData();	
 });
 
-function fetchSchools() {
-	$.get('http://localhost:3000/api/getSchools', (data) => {
-		viewModel.set('isLoading', false);
+
+async function fetchData() {
+	await $.get('http://localhost:3000/api/getSchools', (data) => {
 		viewModel.set('schools', data);
 	})
+	await $.get('http://localhost:3000/api/getStudents', (data) => {
+		viewModel.set('students', data);
+	})
+	console.log(viewModel.get('students'));
+	viewModel.set('isLoading', false);
 }
