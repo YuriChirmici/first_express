@@ -12,47 +12,63 @@ router.get('/', (req, res) => {
 	})
 })
 
-router.post(actionURL, (req, res) => {
-	mongoose.connect('mongodb://localhost/test4', (err) => {
-		if (err) throw err;
+router.post(actionURL, async (req, res) => {
+	try {
+		await mongoose.connect('mongodb://localhost/test4');
+
 		const { school } = req.body;
-		
-		if (school.isNew) {
+
+		if (school.isNew === "true") {
 			//checks if it is already in the database
-			const findObj = {name: school.name};
-			if (school.address) {
-				findObj.address = school.address;
-			}
-			School.find(findObj).exec(function(err, schools) {
-				if (err) throw err;
-				
-				if (schools.length === 0) {
-					const newSchool = new School({
-						_id: new mongoose.Types.ObjectId(),
-						name: school.name,
-						address: school.address
-					});
-					newSchool.save((err) => {
-						if (err) throw err;
-		
-						createNewStudent(newSchool._id, req.body)
-		
-						console.log('School successfully saved.');
-					})
-				} else {
-					createNewStudent(schools[0]._id, req.body)
-				}
-			});
+			setSchool(school, req, res);
 		}
 		else {
-			createNewStudent(school._id, req.body);
+			setStudent(school._id, req, res);
 		}
-	})
-	res.send({result: 'ok'})
-	
+
+		//showData();
+
+	} catch(err) {
+		res.sendStatus(500);
+		console.log(err)
+	}
 })
 
-function createNewStudent(school_id, data)  {
+async function setSchool(school, req, res) {
+	const findObj = {
+		name: school.name, 
+		address: school.address
+	};
+
+	try {
+		const schools = await School.find(findObj).exec();
+		if (schools.length === 0) {
+			const newSchool = new School({
+				_id: new mongoose.Types.ObjectId(),
+				name: school.name,
+				address: school.address
+			});
+
+			try {
+				await newSchool.save();
+				console.log('School successfully saved.');
+				res.sendStatus(200);
+			} catch(err) {
+				console.log(err);
+				res.sendStatus(500);
+			}
+		} else {
+			setStudent(schools[0]._id, req, res)
+		}
+	}
+	catch(err) {
+		console.log(err);
+		res.sendStatus(500);
+	}
+}
+
+async function setStudent(school_id, req, res)  {
+	const data = req.body;
 	const findObj = {
 		firstName: data.firstName, 
 		lastName: data.lastName, 
@@ -60,26 +76,44 @@ function createNewStudent(school_id, data)  {
 		biography: data.biography, 
 		school: { 
 			_id: school_id, 
-			name: data.school.name 
+			name: data.school.name,
+			address: data.school.address 
 		}
 	};
-	
-	Student.find(findObj).exec(function(err, students) {
-		if (err) throw err;
-
+	try {
+		const students = await Student.find(findObj).exec();
 		if (students.length === 0) {
 			const newStudent = new Student({
 				_id: new mongoose.Types.ObjectId(),
-				...findObj				
+				...findObj
 			});
 
-			newStudent.save((err) => {
-				if (err) throw err;
-
+			try {
+				await newStudent.save();
 				console.log('Student successfully saved.');
-			})
+				res.sendStatus(200);
+			} catch(err) {
+				console.log(err)
+				res.sendStatus(500);
+			}
+		} else {
+			res.sendStatus(200);
 		}
-	});
+	} catch(err) {
+		console.log(err);
+		res.sendStatus(500);
+	}
+}
+
+async function showData() {
+	try {
+		const students = await Student.find().exec();
+		const schools = await School.find().exec();
+		console.log(students);
+		console.log(schools);
+	} catch (err) {
+		console.log(err);
+	}
 }
 
 module.exports = router;

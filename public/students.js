@@ -10,10 +10,13 @@ const viewModel = kendo.observable({
 		return this.get('schools').map( el => {
 			const school = {
 				name: el.name,
-				value: el.name
+				value: el.name,
+				fullname: el.name,
+				address: el.address,
+				_id: el._id
 			}
 			if (el.address) {
-				school.name += ` (${el.address})`;
+				school.fullname += ` (${el.address})`;
 			}
 			return school;
 		});
@@ -30,7 +33,8 @@ const viewModel = kendo.observable({
 	sendStudent(e) {
 		e.preventDefault();
 		const isNewSchool = this.get('isNewSchool');
-		const schoolsValue = this.get('schoolsValue').value;
+		const currentSchool = this.get('schoolsValue');
+		const schoolsValue = currentSchool.value;
 
 		this.set('isError', false);
 		this.set('isDataSent', false);
@@ -50,9 +54,14 @@ const viewModel = kendo.observable({
 		}
 
 		if(isNewSchool) {
+			const name = $('input[name=schoolName]').val().trim();
+			if (!name) {
+				this.set('isError', true);
+				return;
+			}
 			data.school = {
 				isNew: true,
-				name: $('input[name=schoolName]').val().trim(),
+				name,
 				address: $('input[name=schoolAddress]').val().trim(),
 			}
 		} else {
@@ -63,15 +72,16 @@ const viewModel = kendo.observable({
 
 			data.school = {
 				isNew: false,
-				_id: schoolsValue._id,
-				name: schoolsValue.name,
+				_id: currentSchool._id,
+				name: currentSchool.name,
 			}
 		}
 
-		$.post('http://localhost:3000/students/saveStudent', data)
+		$.post('http://localhost:3000/students/saveStudent', data, status)
 			.done(() => {
+				console.log(status);
 				this.set('isDataSent', true);
-				fetchData();
+				fetchSchools();
 			})
 			.fail(() => {
 				alert( "error" );
@@ -83,11 +93,11 @@ const viewModel = kendo.observable({
 kendo.bind($('.students__inner'), viewModel);
 
 $(function() {  
-	fetchData();
+	fetchSchools();
 });
 
-function fetchData() {
-	$.get('http://localhost:3000/api/getSchools', (data, status) => {
+function fetchSchools() {
+	$.get('http://localhost:3000/api/getSchools', (data) => {
 		viewModel.set('isLoading', false);
 		viewModel.set('schools', data);
 	})
