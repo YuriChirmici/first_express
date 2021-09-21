@@ -14,16 +14,17 @@ router.get('/', (req, res) => {
 
 router.post(actionURL, async (req, res) => {
 	try {
+		const body = JSON.parse(Object.keys(req.body)[0]);
 		await mongoose.connect('mongodb://localhost/test4');
 
-		let school = await setSchool(req.body.school);
-		const student = await setStudent(school.data._id, req.body);
+		let school = await setSchool(body.school);
+		const student = await setStudent(school.data._id, body);
 
 		//showData();
 
 		//return null to the client if school is not new
 		school = (school.isNew) ? school.data : null; 
-		res.send({ status: 200, student, school });
+		res.send({ student, school });
 	} catch(err) {
 		console.log(err)
 		res.sendStatus(500);
@@ -39,7 +40,7 @@ async function setSchool(schoolData) {
 	};
 
 	const duplicate = await School.findOne(findObj).exec();
-	if (!duplicate && isNew === "true") {
+	if (!duplicate && isNew) {
 		const newSchool = new School({
 			name: school.name,
 			address: school.address

@@ -81,15 +81,13 @@ const viewModel = kendo.observable({
 		$.ajax({
 			method: 'POST',
 			url: 'http://localhost:3000/students/saveStudent',
-			data,
-			dataType: 'json'
+			data: JSON.stringify(data),
 		})
-			.done(({status, student, school}) => {
-				if(status == 200) {
-					this.set('isDataSent', true);
-				}
+			.done(({student, school}) => {
+				this.set('isDataSent', true);
 				if(school) {
-					this.get('schools').push(school);
+					const schools = this.get('schools');
+					this.set('schools', [...schools, school]);
 				}
 			})		
 	}
