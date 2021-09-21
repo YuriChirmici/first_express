@@ -4,6 +4,8 @@ const viewModel = kendo.observable({
 	isDataSent: false,
 	isError: false,
 	schools: [],
+	schoolsValue: {},
+	students: [],
 
 	schoolsOptions() {
 		//generates data for dropdownlist
@@ -22,8 +24,6 @@ const viewModel = kendo.observable({
 		});
 	},
 
-	schoolsValue: {},
-	students: [],
 
 	changeIsNewSchool(isNewSchool) {
 		return () => {
@@ -35,7 +35,6 @@ const viewModel = kendo.observable({
 		e.preventDefault();
 		const isNewSchool = this.get('isNewSchool');
 		const currentSchool = this.get('schoolsValue');
-		const schoolsValue = currentSchool.value;
 
 		this.set('isError', false);
 		this.set('isDataSent', false);
@@ -66,6 +65,7 @@ const viewModel = kendo.observable({
 				address: $('input[name=schoolAddress]').val().trim(),
 			}
 		} else {
+			const schoolsValue = currentSchool.value;
 			if (!schoolsValue || schoolsValue.trim().length === 0) {
 				this.set('isError', true);
 				return;
@@ -114,6 +114,5 @@ async function fetchData() {
 	await $.get('http://localhost:3000/api/getStudents', (data) => {
 		viewModel.set('students', data);
 	})
-	console.log(viewModel.get('students'));
 	viewModel.set('isLoading', false);
 }
