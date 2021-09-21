@@ -22,7 +22,6 @@ router.get('/getStudents', async (req, res) => {
 		await mongoose.connect('mongodb://localhost/test4');
 
 		const students = await Student.find().exec();
-		console.log(students);
 		res.send(students);
 	} catch (err) {
 		console.log(err);
